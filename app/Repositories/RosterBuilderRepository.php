@@ -51,21 +51,9 @@ class RosterBuilderRepository implements RosterBuilderInterface
             $nightNurses = $rotatedNurses->slice(config('roster.nurses_per_shift') * 2, config('roster.nurses_per_shift'))->take(config('roster.nurses_per_shift'));
 
             // Create shifts for the day
-            $shifts->push(new Shift([
-                'date' => $shiftDate,
-                'type' => Shift::SHIFT_TYPE_MORNING,
-                'nurses' => $morningNurses,
-            ]));
-            $shifts->push(new Shift([
-                'date' => $shiftDate,
-                'type' => Shift::SHIFT_TYPE_EVENING,
-                'nurses' => $eveningNurses,
-            ]));
-            $shifts->push(new Shift([
-                'date' => $shiftDate,
-                'type' => Shift::SHIFT_TYPE_NIGHT,
-                'nurses' => $nightNurses,
-            ]));
+            $shifts->push(self::createShift($shiftDate, Shift::SHIFT_TYPE_MORNING, $morningNurses));
+            $shifts->push(self::createShift($shiftDate, Shift::SHIFT_TYPE_EVENING, $eveningNurses));
+            $shifts->push(self::createShift($shiftDate, Shift::SHIFT_TYPE_NIGHT, $nightNurses));
         }
 
         return $shifts;
@@ -77,5 +65,14 @@ class RosterBuilderRepository implements RosterBuilderInterface
         $offset = $offset % $count;
 
         return $collection->slice($offset)->merge($collection->take($offset));
+    }
+
+    protected static function createShift(Carbon $shiftDate, string $shiftType, Collection $nurses) : Shift
+    {
+        return new Shift([
+            'shift_date' => $shiftDate,
+            'type' => $shiftType,
+            'nurses' => $nurses,
+        ]);
     }
 }

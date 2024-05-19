@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use App\Models\Nurse;
@@ -12,7 +13,7 @@ class RosterFormatterRepositoryTest extends TestCase
 {
     protected $rosterFormatter;
 
-    protected function setUp(): void
+    protected function setUp() : void
     {
         parent::setUp();
         $this->rosterFormatter = new RosterFormatterRepository();
@@ -22,7 +23,7 @@ class RosterFormatterRepositoryTest extends TestCase
     {
         // Arrange
         $shift = new Shift([
-            'date' => Carbon::parse('2022-01-01'),
+            'shift_date' => Carbon::parse('2022-01-01'),
             'type' => 'day',
             'nurses' => new Collection([
                 new Nurse(['name' => 'Iskra']),

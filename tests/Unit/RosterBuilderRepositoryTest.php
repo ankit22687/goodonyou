@@ -55,10 +55,10 @@ class RosterBuilderRepositoryTest extends TestCase
 
         foreach ($result as $shift) {
             $this->assertInstanceof(Shift::class, $shift);
-            $this->assertArrayHasKey('date', $shift);
+            $this->assertArrayHasKey('shift_date', $shift);
             $this->assertArrayHasKey('type', $shift);
             $this->assertArrayHasKey('nurses', $shift);
-            $this->assertInstanceOf(Carbon::class, $shift['date']);
+            $this->assertInstanceOf(Carbon::class, $shift['shift_date']);
             $this->assertContains($shift['type'], [Shift::SHIFT_TYPE_MORNING, Shift::SHIFT_TYPE_EVENING, Shift::SHIFT_TYPE_NIGHT]);
             $this->assertInstanceOf(Collection::class, $shift['nurses']);
         }

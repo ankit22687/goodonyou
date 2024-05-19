@@ -4,14 +4,17 @@ namespace App\Models;
 
 use Jenssegers\Model\Model;
 
-class Shift extends Model {
-    CONST SHIFT_TYPE_MORNING = 'morning';
-    CONST SHIFT_TYPE_EVENING = 'evening';
-    CONST SHIFT_TYPE_NIGHT = 'night';
+class Shift extends Model
+{
+    public const SHIFT_TYPE_MORNING = 'morning';
 
-    protected $fillable = ['date', 'type', 'nurses'];
-    
+    public const SHIFT_TYPE_EVENING = 'evening';
+
+    public const SHIFT_TYPE_NIGHT = 'night';
+
+    protected $fillable = ['shift_date', 'type', 'nurses'];
+
     protected $casts = [
-        'date' => 'date',
+        'shift_date' => 'date',
     ];
 }
