@@ -43,7 +43,7 @@ class RosterBuilderRepository implements RosterBuilderInterface
             $shiftDate = $startDate->copy()->addDays($i);
 
             // Rotate the nurses collection
-            $rotatedNurses = self::rotate($nurses, $i * config('roster.nurses_per_shift') * 3);
+            $rotatedNurses = self::rotate($nurses, $i * config('roster.nurses_per_shift') * config('roster.shifts_per_day'));
 
             // Assign nurses to shifts
             $morningNurses = $rotatedNurses->take(config('roster.nurses_per_shift'));
