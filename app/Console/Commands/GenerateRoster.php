@@ -17,6 +17,7 @@ class GenerateRoster extends Command
     ) {
         parent::__construct();
     }
+
     /**
      * The name and signature of the console command.
      *
@@ -26,6 +27,7 @@ class GenerateRoster extends Command
                             {filename : filename of the nurses file to import, in JSON format}
                             {start-date : the first date of the period to roster, in YYYY-MM-DD format}
                             {end-date : a nurses file to import}
+                            {nursename? : get roaster for nurse}
     ';
 
     /**
@@ -43,8 +45,9 @@ class GenerateRoster extends Command
         $filename = $this->argument('filename');
         $startDate = $this->argument('start-date');
         $endDate = $this->argument('end-date');
+        $nurseName = $this->argument('nursename');
 
-        if (!$this->validateArguments($filename, $startDate, $endDate)) {
+        if (! $this->validateArguments($filename, $startDate, $endDate)) {
             return;
         }
 
@@ -52,7 +55,7 @@ class GenerateRoster extends Command
 
         $nurses = $this->rosterBuilder->loadNursesFromFile($filename);
 
-        $rosters = $this->rosterBuilder->buildRoster($nurses, Carbon::parse($startDate), Carbon::parse($endDate));
+        $rosters = $this->rosterBuilder->buildRoster($nurses, Carbon::parse($startDate), Carbon::parse($endDate), $nurseName);
 
         $this->info(
             $this->rosterFormatter->formatRoster(
@@ -61,7 +64,7 @@ class GenerateRoster extends Command
         );
     }
 
-    public function validateArguments(string $filename, string $startDate, string $endDate): bool
+    public function validateArguments(string $filename, string $startDate, string $endDate) : bool
     {
         $validator = Validator::make([
             'filename' => $filename,
@@ -75,18 +78,20 @@ class GenerateRoster extends Command
 
         if ($validator->fails()) {
             $this->info('Cannot start command, see errors below:');
-        
+
             foreach ($validator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return false;
         }
 
         // Check if file exists
-        if (!Storage::exists($filename)) {
+        if (! Storage::exists($filename)) {
             $this->info('Cannot start command:');
 
             $this->error("File {$filename} does not exist");
+
             return false;
         }
 

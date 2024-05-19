@@ -33,7 +33,7 @@ class RosterBuilderRepository implements RosterBuilderInterface
         return $nurses;
     }
 
-    public static function buildRoster(Collection $nurses, Carbon $startDate, Carbon $endDate) : Collection
+    public static function buildRoster(Collection $nurses, Carbon $startDate, Carbon $endDate, ?string $nurseName = null) : Collection
     {
         $totalDays = $endDate->diffInDays($startDate);
 
@@ -54,6 +54,13 @@ class RosterBuilderRepository implements RosterBuilderInterface
             $shifts->push(self::createShift($shiftDate, Shift::SHIFT_TYPE_MORNING, $morningNurses));
             $shifts->push(self::createShift($shiftDate, Shift::SHIFT_TYPE_EVENING, $eveningNurses));
             $shifts->push(self::createShift($shiftDate, Shift::SHIFT_TYPE_NIGHT, $nightNurses));
+        }
+
+        // If nurseName is provided, filter shifts for that nurse
+        if ($nurseName) {
+            $shifts = $shifts->filter(function ($shift) use ($nurseName) {
+                return $shift['nurses']->contains('name', $nurseName);
+            });
         }
 
         return $shifts;

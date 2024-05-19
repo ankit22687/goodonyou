@@ -38,3 +38,15 @@ Doing so with no params should print out usage information.
 ## Tests
 
 You can run tests with `php artisan test`. Tests for the scaffold code have been provided.
+
+## Thought Process
+
+Making sure when create a roster has adequate staff, distribute workload fairly so each nurse from JSON file get a shift
+
+prevent shift overlap so only one nurse can work ones a day.
+
+keeping in mind about code which supports date range specifications
+
+Implemented optional nurse name parameter to get roster for a given nurse name.
+
+Ensure all the implemented functionality covered under tests.

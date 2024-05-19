@@ -93,4 +93,42 @@ class RosterBuilderRepositoryTest extends TestCase
             $this->assertCount($nurseNames->count(), $nurseNames->unique());
         }
     }
+
+    public function testShiftsForSpecificNurse()
+    {
+        // Arrange
+        $nurses = new Collection([
+            ['name' => 'Nurse A'],
+            ['name' => 'Nurse B'],
+            ['name' => 'Nurse C'],
+            ['name' => 'Nurse D'],
+            ['name' => 'Nurse E'],
+            ['name' => 'Nurse F'],
+            ['name' => 'Nurse G'],
+            ['name' => 'Nurse H'],
+            ['name' => 'Nurse I'],
+            ['name' => 'Nurse J'],
+            ['name' => 'Nurse K'],
+            ['name' => 'Nurse L'],
+            ['name' => 'Nurse M'],
+            ['name' => 'Nurse N'],
+            ['name' => 'Nurse O'],
+        ]);
+
+        $startDate = Carbon::parse('2024-05-01');
+        $endDate = Carbon::parse('2024-05-05');
+
+        $specificNurse = 'Nurse A';
+
+        // Act
+        $result = RosterBuilderRepository::buildRoster($nurses, $startDate, $endDate, $specificNurse);
+
+        // Assert
+        $this->assertInstanceOf(Collection::class, $result);
+
+        foreach ($result as $shift) {
+            $nurseNames = $shift['nurses']->pluck('name');
+            $this->assertTrue($nurseNames->contains($specificNurse));
+        }
+    }
 }
