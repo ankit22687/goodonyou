@@ -1,0 +1,5 @@
+*
+!public/
+!.gitignore
+!sample_data
+!sample_data/*
